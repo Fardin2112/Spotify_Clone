@@ -36,6 +36,20 @@ const PlayerContextProvider = (props) => {
         await audioRef.current.play();
         setplayStatus(true);
     }
+    const previous = async () => {
+        if (track.id > 0){
+            await setTrack(songsData[track.id-1]);
+            await audioRef.current.play();
+            setplayStatus(true);
+        }
+    }
+    const next = async () => {
+        if (track.id < songsData.length-1){
+            await setTrack(songsData[track.id+1]);
+            await audioRef.current.play();
+            setplayStatus(true);
+        }
+    }
     // logic for seekbar time
     useEffect(()=>{
         setTimeout(()=>{
@@ -64,6 +78,7 @@ const PlayerContextProvider = (props) => {
         time,setTime,
         play,pause,
         playWithId,
+        previous , next
     }
 
     return (

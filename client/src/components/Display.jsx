@@ -1,3 +1,5 @@
+// this is used to mangae displayalbum and display home , when you click any album this display 
+// show displayalbum and else show displayhome
 import React, {useEffect, useRef} from 'react'
 import { Route ,Routes, useLocation } from 'react-router-dom'
 import DisplayHome from './DisplayHome'

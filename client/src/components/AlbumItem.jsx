@@ -1,3 +1,4 @@
+// how album song will present in web
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
 

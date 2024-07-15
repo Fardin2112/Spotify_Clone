@@ -1,3 +1,4 @@
+// this is home page for display song when you not clicking any album
 import React from "react";
 import Navbar from "./Navbar";
 import AlbumItem from "./AlbumItem";
