@@ -36,6 +36,7 @@ const PlayerContextProvider = (props) => {
         await audioRef.current.play();
         setplayStatus(true);
     }
+    // this is used to previous any song
     const previous = async () => {
         if (track.id > 0){
             await setTrack(songsData[track.id-1]);
@@ -43,12 +44,17 @@ const PlayerContextProvider = (props) => {
             setplayStatus(true);
         }
     }
+    // this is used to next any song
     const next = async () => {
         if (track.id < songsData.length-1){
             await setTrack(songsData[track.id+1]);
             await audioRef.current.play();
             setplayStatus(true);
         }
+    }
+    // for seekbar click playing by that duration
+    const seekSong = async (e)=> {
+        audioRef.current.currentTime = ((e.nativeEvent.offsetX / seekBg.current.offsetWidth)*audioRef.current.duration)
     }
     // logic for seekbar time
     useEffect(()=>{
@@ -68,7 +74,7 @@ const PlayerContextProvider = (props) => {
             }
         })
     },[audioRef])
-
+    // this contextValue wrap with playercontext provider or export in all compenent  
     const contextValue = {
         audioRef,
         seekBar,
@@ -78,7 +84,8 @@ const PlayerContextProvider = (props) => {
         time,setTime,
         play,pause,
         playWithId,
-        previous , next
+        previous , next,
+        seekSong
     }
 
     return (
