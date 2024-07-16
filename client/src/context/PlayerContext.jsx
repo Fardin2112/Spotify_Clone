@@ -9,7 +9,7 @@ const PlayerContextProvider = (props) => {
     const seekBg = useRef();
     const seekBar = useRef();
 
-    const [track,setTrack] = useState(songsData[2]);
+    const [track,setTrack] = useState(songsData[0]);
     const [playStatus,setplayStatus] = useState(false);
     const [time,setTime] = useState({
         currentTime : {
@@ -59,7 +59,7 @@ const PlayerContextProvider = (props) => {
     // logic for seekbar time
     useEffect(()=>{
         setTimeout(()=>{
-            audioRef.current.ontimeupdate = () =>{
+            audioRef.current.ontimeupdate = () => {
                 seekBar.current.style.width = (Math.floor(audioRef.current.currentTime /audioRef.current.duration * 100)+ "%")
                 setTime({
                     currentTime : {
