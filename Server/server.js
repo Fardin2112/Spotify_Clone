@@ -30,7 +30,7 @@ app.use(express.json()) // whenever we get any req that req pass from this expre
 app.use(cors()) // using this if or backend and frontend running diff number even we can run
 
 // intitializing routes
-app.use('/app/song',songRouter);
+app.use('/api/song',songRouter);
 
 app.get('/',(req,res)=>{
     res.send("API Working");
