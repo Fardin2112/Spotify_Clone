@@ -10,6 +10,8 @@
 // controller all API logics
 // mongodb concept
 // for multiple routes concept
+// install react toastify in admin for toast notification
+// axios : using this we can api
 
 import express from 'express'
 import cors from 'cors'
