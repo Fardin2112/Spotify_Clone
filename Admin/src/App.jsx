@@ -1,6 +1,6 @@
 import React from 'react'
 import "./index.css"
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Routes,Route } from 'react-router-dom';
 import AddSong from "./pages/AddSong"
@@ -8,15 +8,16 @@ import AddAlbum from './pages/AddAlbum';
 import ListSong from './pages/ListSong';
 import ListAlbum from './pages/ListAlbum';
 import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
 
 const App = () => {
-  const notify = () => toast("Wow so easy!");
   return (
     <div className='flex items-start min-h-screen'>
       {/* <button onClick={notify}>Notify!</button> */}
       <ToastContainer />
       <Sidebar/>
       <div className='flex-1 h-screen overflow-y-scroll bg-[#F3FFF7]'>
+        <Navbar/>
         <div className='pt-8 pl-5 sm:pt-12 sm:pl-12'>
           <Routes>
             <Route path="/add-song" element={<AddSong/>} />
