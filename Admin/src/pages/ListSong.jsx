@@ -14,7 +14,6 @@ const ListSong = () => {
       if (responce.data.success){
         setData(responce.data.songs)
       }
-      console.log(data)
       
     } catch (error) {
       toast.error("Error Occurred")   
@@ -50,7 +49,7 @@ const ListSong = () => {
         </div>
         {data.map((items, index)=>{
           return (
-            <div key={index} className='grid  grid-cols-[1fr_1fr_1fr] sm:grid-cols-[0.5fr_1fr_2fr_1fr_0.5fr]  items-center gap-2.5 p-3 border border-gray-300 text-sm mr-5 bg-gray-100'>
+            <div key={index} className='grid  grid-cols-[1fr_1fr_1fr] sm:grid-cols-[0.5fr_1fr_2fr_1fr_0.5fr]  items-center gap-2.5 p-3 border border-gray-300 text-sm mr-5'>
               <img className='w-12' src={items.image} alt="" />
               <p>{items.name}</p>
               <p>{items.album}</p>
