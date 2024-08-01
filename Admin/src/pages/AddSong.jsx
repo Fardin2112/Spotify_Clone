@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {assets} from "../assets/assets"
 import axios from 'axios'
 import { url } from '../App';
@@ -45,6 +45,21 @@ const AddSong = () => {
     }
     setLoading(false)
   }
+  const LoadAlbumData = async () => {
+    try {
+      const responce = await axios.get(`${url}/api/album/list`);
+
+      if (responce.data.success){
+          setAlbumData(responce.data.albums)
+      }
+    } catch (error) {
+      toast.error("Enable to load albums data");
+    }
+    
+  }
+  useEffect(()=>{
+    LoadAlbumData()
+  },[])
 
   return loading ? 
   <div className='grid place-items-center min-h-[80vh]'>
@@ -80,7 +95,8 @@ const AddSong = () => {
       <div className='flex flex-col gap-2.5'>
         <p>Album</p>
         <select onChange={(e)=>setAlbum(e.target.value)} defaultValue={album} className='bg-transparent outline-green-600 border-gray-400 border-2 p-2.5 w-[max(150px)]'>
-          <option value="none">None</option>
+          <option value="none">none</option>
+          {albumData.map((items,index)=>(<option key={index} value={items.name}>{items.name}</option>))}
         </select>
       </div>
 

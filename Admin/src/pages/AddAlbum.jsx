@@ -48,7 +48,7 @@ const AddAlbum = () => {
   
     <form onSubmit={onSubmitHandler} className='flex flex-col items-start gap-8 text-gray-600'>
       <div className='flex flex-col gap-4'>
-        <p>Upload Song</p>
+        <p>Upload Album</p>
         <input onChange={(e)=>setImage(e.target.files[0])} type="file" id='image' accept='image/*' hidden />
         <label htmlFor="image">
           <img className='w-28 cursor-pointer' src={image ? URL.createObjectURL(image) :assets.upload_area} alt="" />
