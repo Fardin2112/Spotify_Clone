@@ -9,7 +9,7 @@ const PlayerContextProvider = (props) => {
     const seekBg = useRef();
     const seekBar = useRef();
 
-    const url = 'https://spotify-clone-zc2j.onrender.com';
+    const url = 'https://spotify-clone-black-chi.vercel.app';
 
     const [songsData,setSongsData] = useState([]);
     const [albumsData,setAlbumsdata] = useState([]);
