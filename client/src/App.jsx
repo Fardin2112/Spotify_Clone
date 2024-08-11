@@ -3,6 +3,9 @@ import Sidebar from './components/Sidebar'
 import Player from './components/Player'
 import Display from './components/Display'
 import { PlayerContext } from './context/PlayerContext'
+import axios from 'axios'
+
+axios.defaults.baseURL = 'https://spotify-clone-black-chi.vercel.app'
 
 const App = () => {
   const {audioRef,track,songsData} = useContext(PlayerContext)

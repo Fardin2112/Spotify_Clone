@@ -9,7 +9,7 @@ const PlayerContextProvider = (props) => {
     const seekBg = useRef();
     const seekBar = useRef();
 
-    const url = 'https://spotify-clone-black-chi.vercel.app';
+    // const url = 'https://spotify-clone-black-chi.vercel.app';
 
     const [songsData,setSongsData] = useState([]);
     const [albumsData,setAlbumsdata] = useState([]);
@@ -75,7 +75,7 @@ const PlayerContextProvider = (props) => {
     }
     const getSong = async() => {
         try {
-            const responce = await axios.get(`${url}/api/song/list`);
+            const responce = await axios.get('/api/song/list');
 
             if (responce.data.success){
                 setSongsData(responce.data.songs)
@@ -88,7 +88,7 @@ const PlayerContextProvider = (props) => {
     }
     const getAlbum = async () => {
         try {
-            const responce = await axios.get(`${url}/api/album/list`)
+            const responce = await axios.get('/api/album/list')
 
             if (responce.data.success){
                 setAlbumsdata(responce.data.albums)
