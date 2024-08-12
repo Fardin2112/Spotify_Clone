@@ -9,23 +9,16 @@ const PlayerContextProvider = (props) => {
     const seekBg = useRef();
     const seekBar = useRef();
 
-    // const url = 'https://spotify-clone-black-chi.vercel.app';
-
     const [songsData,setSongsData] = useState([]);
     const [albumsData,setAlbumsdata] = useState([]);
     const [track,setTrack] = useState();
     const [playStatus,setplayStatus] = useState(false);
 
-    const [time,setTime] = useState({
-        currentTime : {
-            second : 0,
-            minute :0
-        },
-        totalTime : {
-            second : 0,
-            minute : 0
-        }
-    })
+    const [time, setTime] = useState({
+        currentTime: { second: 0, minute: 0 },
+        totalTime: { second: 0, minute: 0 },
+    });
+    
     // from here we can pause and play song 
     const play = () => {
         audioRef.current.play();
@@ -49,9 +42,9 @@ const PlayerContextProvider = (props) => {
     const previous = async () => {
        
         songsData.map(async(item,index) => {
-            if (item._id === track._id && index > 0) {
+            if (item._id === track._id) {
                 
-                await setTrack(songsData[index - 1])
+                await setTrack(songsData[(index - 1 + songsData.length) % songsData.length] )
                 await audioRef.current.play();
                 setplayStatus(true)
             }
@@ -59,16 +52,23 @@ const PlayerContextProvider = (props) => {
     }
     // this is used to next any song
     const next = async () => {
-
-        songsData.map(async(item,index) => {
-            if (item._id === track._id && index < songsData.length -1) {
-                
-                await setTrack(songsData[index + 1])
-                await audioRef.current.play();
-                setplayStatus(true)
-            }
-        })
-    }
+        const currentIndex = songsData.findIndex(item => item._id === track._id);
+    
+        if (currentIndex !== -1) {
+            // Get the next track index
+            const nextIndex = (currentIndex + 1) % songsData.length;
+            const nextTrack = songsData[nextIndex];
+    
+            // Update the track state
+            setTrack(nextTrack);
+    
+            // Wait for the track to be set before playing
+            setTimeout(() => {
+                audioRef.current.play();
+                setplayStatus(true);
+            }, 100); // 100ms delay to ensure state update
+        }
+    };
     // for seekbar click playing by that duration
     const seekSong = async (e)=> {
         audioRef.current.currentTime = ((e.nativeEvent.offsetX / seekBg.current.offsetWidth)*audioRef.current.duration)
@@ -101,23 +101,48 @@ const PlayerContextProvider = (props) => {
         }
     }
     // logic for seekbar time
-    useEffect(()=>{
-        setTimeout(()=>{
-            audioRef.current.ontimeupdate = () => {
-                seekBar.current.style.width = (Math.floor(audioRef.current.currentTime /audioRef.current.duration * 100)+ "%")
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (audio) {
+            const handleTimeUpdate = () => {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                seekBar.current.style.width = `${progress}%`;
+    
                 setTime({
-                    currentTime : {
-                        second :Math.floor(audioRef.current.currentTime % 60) ,
-                        minute :Math.floor(audioRef.current.currentTime / 60)
+                    currentTime: {
+                        second: Math.floor(audio.currentTime % 60),
+                        minute: Math.floor(audio.currentTime / 60),
                     },
-                    totalTime : {
-                        second : Math.floor(audioRef.current.duration % 60),
-                        minute : Math.floor(audioRef.current.duration / 60)
-                    }
-                })
-            }
-        })
-    },[audioRef])
+                    totalTime: {
+                        second: Math.floor(audio.duration % 60),
+                        minute: Math.floor(audio.duration / 60),
+                    },
+                });
+            };
+    
+            audio.addEventListener('timeupdate', handleTimeUpdate);
+    
+            // Cleanup on unmount
+            return () => {
+                audio.removeEventListener('timeupdate', handleTimeUpdate);
+            };
+        }
+    }, [track]);
+
+     // Autoplay next song when current song ends
+     useEffect(() => {
+        const audio = audioRef.current;
+        if (audio) {
+            const handleEnded = () => next();
+            audio.addEventListener('ended', handleEnded);
+
+            // Cleanup on unmount
+            return () => {
+                audio.removeEventListener('ended', handleEnded);
+            };
+        }
+    }, [track]);
+
     useEffect(()=>{
         getSong();
         getAlbum();
