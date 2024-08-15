@@ -21,7 +21,8 @@ const Navbar = () => {
             alt=""
           />
         </div>
-        <div className="flex items-center gap-4">
+
+        {/* <div className="flex items-center gap-4">
           <p className="bg-white text-black rounded-2xl text-[15px] px-4 py-1 hidden md:block cursor-pointer">
             Explore Premium{" "}
           </p>
@@ -31,7 +32,11 @@ const Navbar = () => {
           <p className="bg-purple-500 text-black rounded-full w-7 h-7 flex items-center justify-center">
             D
           </p>
+        </div> */}
+        <div>
+          <button onClick={()=> navigate(`/Register`)}>Sign Up</button>
         </div>
+
       </div>
       <div className="mt-4 flex items-center gap-2"> 
         <p className="bg-white text-black px-4  py-1 rounded-2xl flex items-center justify-center cursor-pointer">All</p>

@@ -1,30 +1,17 @@
-import  {useContext} from 'react'
-import Sidebar from './components/Sidebar' 
-import Player from './components/Player'
-import Display from './components/Display'
-import { PlayerContext } from './context/PlayerContext'
-import axios from 'axios'
+import axios from "axios";
+import { Routes,Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import RegisterPage from "./pages/Register";
 
-axios.defaults.baseURL = 'https://spotify-clone-black-chi.vercel.app'
+axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
 const App = () => {
-  const {audioRef,track,songsData} = useContext(PlayerContext)
-  return (
-    <div className='h-screen bg-black'>
-      {
-        songsData.length !== 0 
-        ? <>
-         <div className='h-[90%] flex  '>
-        <Sidebar />
-        <Display />
-      </div>
-      <Player />
-        </>
-        : null
-      }
-      <audio ref={audioRef} src={track ? track.file : ""} preload="auto"></audio>
-    </div>
-  )
-}
+ return (
+  <Routes>
+    <Route path="/" element={<HomePage/>}/>
+    <Route path="/Register" element={<RegisterPage/>}/>
+  </Routes>
+ )
+};
 
-export default App
+export default App;
