@@ -3,6 +3,7 @@ import { Routes,Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import RegisterPage from "./pages/Register";
 import LoginPage from "./pages/Login";
+import ForgotPass from "./pages/ForgotPass";
 
 axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
@@ -12,6 +13,7 @@ const App = () => {
     <Route path="/" element={<HomePage/>}/>
     <Route path="/Register" element={<RegisterPage/>}/>
     <Route path="/Login" element={<LoginPage/>}/>
+    <Route path="/Forgot" element={<ForgotPass/>}/>
   </Routes>
  )
 };

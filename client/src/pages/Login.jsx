@@ -1,7 +1,12 @@
 import React from "react";
 import { assets } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
+
 
 const LoginPage = () => {
+
+  const navigate = useNavigate();
+
   return (
     <div className="w-full h-screen bg-black flex flex-col items-center">
       {/* Logo Section */}
@@ -16,7 +21,7 @@ const LoginPage = () => {
       {/* Form Section */}
       <div className="w-[90%] sm:w-[400px] h-auto sm:h-screen px-4 sm:px-8 font-sans text-white mt-2">
         <header className="flex items-center justify-center mb-3">
-          <h1 className="text-2xl sm:text-4xl font-semibold text-center">
+          <h1 className="text-2xl sm:text-4xl font-semibold text-center tracking-tighter">
             Log in to Spotify
           </h1>
         </header>
@@ -47,7 +52,7 @@ const LoginPage = () => {
           <div className="mb-5">
             <label className="block text-base font-medium">Email address</label>
             <input
-              className="mt-2 p-3 sm:p-5 font-semibold border-2 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
+              className="mt-2  border-gray-600 p-3 sm:p-5 font-semibold border-2 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
               type="email"
               required
               placeholder="name@domain.com"
@@ -57,17 +62,17 @@ const LoginPage = () => {
           <div className="mb-5">
             <label className="block text-base font-medium">Password</label>
             <input
-              className="mt-2 p-3 sm:p-5 font-semibold border-2 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
+              className="mt-2 p-3 sm:p-5 font-semibold border-2 border-gray-600 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
               type="password"
               required
               placeholder="Password"
             />
           </div>
 
-          <button className="bg-[#1ed760] rounded-3xl w-full h-10 mt-5 text-black font-semibold text-xl hover:bg-green-700 transition duration-200">
+          <button className="bg-[#1ed760] rounded-3xl w-full h-10 mt-5 text-black font-semibold text-lg hover:bg-green-700 transition duration-200">
             Log in
           </button>
-          <button className="text-base font-semibold w-full items-center mt-5">Forgot Your Password?</button>
+          <button className="text-base font-semibold w-full items-center mt-5" onClick={()=> navigate("/Forgot")}>Forgot Your Password?</button>
         </div>
 
         <hr className=" border-gray-600 mb-5 mt-5" />

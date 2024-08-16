@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { assets } from "../assets/assets";
+import { useFirebase } from "../context/FirebaseContext";
+
 
 const RegisterPage = () => {
+
+  const firebase = useFirebase();
+
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    await  firebase.signupUserWithEmailandPassword(email,password)
+    }
+
   return (
     <div className="w-full h-screen bg-black flex flex-col items-center">
       {/* Logo Section */}
@@ -16,7 +29,7 @@ const RegisterPage = () => {
       {/* Form Section */}
       <div className="w-[90%] sm:w-[400px] h-auto sm:h-screen px-4 sm:px-8 font-sans text-white mt-2">
         <header className="flex items-center justify-center mb-3">
-          <h1 className="text-2xl sm:text-5xl font-bold text-center">
+          <h1 className="text-2xl sm:text-5xl font-bold text-center tracking-tighter">
             Sign up to start listening
           </h1>
         </header>
@@ -26,7 +39,8 @@ const RegisterPage = () => {
           <div className="mb-5">
             <label className="block text-base font-medium">Email address</label>
             <input
-              className="mt-2 p-3 sm:p-5 font-semibold border-2 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
+            onChange={ e => setEmail(e.target.value)} value={email}
+              className=" border-gray-600 mt-2 p-3 sm:p-5 font-semibold border-2 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
               type="email"
               required
               placeholder="name@domain.com"
@@ -36,14 +50,15 @@ const RegisterPage = () => {
           <div className="mb-5">
             <label className="block text-base font-medium">Password</label>
             <input
-              className="mt-2 p-3 sm:p-5 font-semibold border-2 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
+            onChange={ e => setPassword(e.target.value)} value={password}
+              className=" border-gray-600 mt-2 p-3 sm:p-5 font-semibold border-2 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
               type="password"
               required
               placeholder="Password"
             />
           </div>
 
-          <button className="bg-green-600 rounded-3xl w-full h-10 mt-5 text-black font-semibold hover:bg-green-700 transition duration-200">
+          <button onClick={handleSubmit} className="bg-[#1ed760] rounded-3xl w-full h-10 mt-5 text-black font-semibold text-lg hover:bg-green-700 transition duration-200">
             Next
           </button>
         </div>
