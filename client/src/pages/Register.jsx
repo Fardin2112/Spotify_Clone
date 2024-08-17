@@ -1,19 +1,28 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import { useFirebase } from "../context/FirebaseContext";
+import { useNavigate } from "react-router-dom";
 
 
 const RegisterPage = () => {
 
+  const navigate = useNavigate();
   const firebase = useFirebase();
 
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
 
+  // handle for signin using email and password
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    await  firebase.signupUserWithEmailandPassword(email,password)
+    e.preventDefault();
+    try {
+      await firebase.signupUserWithEmailandPassword(email, password);
+      navigate(`/`);
+    } catch (err) {
+      console.log(err);
     }
+  };
+   
 
   return (
     <div className="w-full h-screen bg-black flex flex-col items-center">
@@ -72,7 +81,7 @@ const RegisterPage = () => {
 
         {/* Google Signup Button */}
         <div className="mt-5">
-          <button className="flex items-center justify-center border border-gray-600 w-full h-10 p-3 font-bold rounded-3xl hover:bg-gray-800 transition duration-200">
+          <button onClick={firebase.signupUserWithGoogle} className="flex items-center justify-center border border-gray-600 w-full h-10 p-3 font-bold rounded-3xl hover:bg-gray-800 transition duration-200">
             <img
               className="w-6 h-6 mr-3"
               src={assets.GoogleLogo}

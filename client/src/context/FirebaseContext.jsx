@@ -1,6 +1,16 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
-import {getAuth,createUserWithEmailAndPassword} from "firebase/auth"
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+const GoogleProvider = new GoogleAuthProvider();
 
 const FirebaseContext = createContext();
 
@@ -15,21 +25,51 @@ const firebaseConfig = {
   appId: "1:38889198484:web:5a2249c917c0f78978f581"
 };
 
-
-export const useFirebase = () => useContext(FirebaseContext)
-
 // Initialize Firebase
 const firebasApp = initializeApp(firebaseConfig);
+const firebaseAuth = getAuth(firebasApp);
 
-const firebaseAuth = getAuth(firebasApp)
+export const useFirebase = () => useContext(FirebaseContext);
 
 export const FirebaseProvider = (props) => {
 
-  const signupUserWithEmailandPassword = (email,password) => 
-    createUserWithEmailAndPassword(firebaseAuth,email,password)
+  // to check user is looged or signOut
+  const [user, setUser] = useState(null);
+  useEffect(()=>{
+    onAuthStateChanged(firebaseAuth, (user)=>{
+      if (user){
+        // logged in
+        setUser(user)
+      } else {
+        // logged out
+        setUser(null) 
+      }
+    })
+  },[])
 
-  return ( <FirebaseContext.Provider value={{signupUserWithEmailandPassword}}>
-    {props.children}
+  const navigate = useNavigate();
+
+  // Sign up using email and password
+  const signupUserWithEmailandPassword = (email, password) =>
+    createUserWithEmailAndPassword(firebaseAuth, email, password);
+
+  // sign up using email and password
+  const signinUserWithEmailandPassword = (email,password) => {
+    signInWithEmailAndPassword(firebaseAuth,email,password);
+  }
+
+  // Sign up/in using Google
+  const signupUserWithGoogle = () => {
+    return signInWithPopup(firebaseAuth, GoogleProvider)
+      .then(() => navigate("/"))
+      .catch((e) => console.log(e));
+  };
+
+  return (
+    <FirebaseContext.Provider
+      value={{ signupUserWithEmailandPassword, signupUserWithGoogle, signinUserWithEmailandPassword,user }}
+    >
+      {props.children}
     </FirebaseContext.Provider>
-  )
-}
+  );
+};

@@ -9,12 +9,14 @@ axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
 const App = () => {
  return (
-  <Routes>
-    <Route path="/" element={<HomePage/>}/>
-    <Route path="/Register" element={<RegisterPage/>}/>
-    <Route path="/Login" element={<LoginPage/>}/>
-    <Route path="/Forgot" element={<ForgotPass/>}/>
-  </Routes>
+  <HomePage/>
+  // <Routes>
+    
+  //   {/* <Route path="/" element={<HomePage/>}/>
+  //   <Route path="/Register" element={<RegisterPage/>}/>
+  //   <Route path="/Login" element={<LoginPage/>}/>
+  //   <Route path="/Forgot" element={<ForgotPass/>}/> */}
+  // </Routes>
  )
 };
 
