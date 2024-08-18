@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useFirebase } from "../context/FirebaseContext";
 
-const Navbar = () => {
+const Navbar = ({onclick}) => {
   const navigate = useNavigate();
   const { user } = useFirebase();
 
@@ -12,7 +12,7 @@ const Navbar = () => {
       {/* Navigation buttons */}
       <div className="flex items-center gap-2">
         <img
-          onClick={() => navigate(-1)}
+          onClick={onclick}
           className="w-8 h-8 bg-gray-800 rounded-full cursor-pointer p-2 hover:bg-gray-700"
           src={assets.arrow_left}
           alt="Go Back"

@@ -5,14 +5,13 @@ import { assets } from "../assets/assets";
 import { useParams } from "react-router-dom";
 import { PlayerContext } from "../context/PlayerContext";
 
-const DisplayAlbum = ({album}) => {
-  const { id } = useParams();
-  const [albumData,setAlbumData] = useState("")
+const DisplayAlbum = ({id}) => {
+  const [albumData,setAlbumData] = useState({})
   const {playWithId, songsData, albumsData} = useContext(PlayerContext)
 
   useEffect(()=>{
     albumsData.find((item)=>{
-      if (item._id == id){
+      if (item._id === id){
         setAlbumData(item);
       }
     })
@@ -20,8 +19,7 @@ const DisplayAlbum = ({album}) => {
 
   return albumData ? (
     <>
-      <Navbar />
-      <div className="mt-10 flex gap-8 flex-col md:flex-row md: items-center ">
+      <div className="mt-10 flex gap-8 flex-col md:flex-row md: items-center">
         <img className="w-48 rounded " src={albumData.image} alt="" />
         <div>
           <p>Playlist</p>
@@ -47,7 +45,7 @@ const DisplayAlbum = ({album}) => {
       </div>
       <hr />
       {
-        songsData.filter((item) => item.album === album.name).map((item,index)=>(
+        songsData.filter((item) => item.album === albumData.name).map((item,index)=>(
             <div onClick={()=>playWithId(item._id)} key={index} className="grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer">
                 <p className="text-white">
                     <b className="mr-4 text-[#a7a7a7]">{index+1}</b>

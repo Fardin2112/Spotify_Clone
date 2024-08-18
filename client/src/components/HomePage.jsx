@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import Sidebar from "./Sidebar"
 import Player from "./Player";
-import Display from "./Display";
+//import Display from "./Display";
 import { PlayerContext } from "../context/PlayerContext";
+import DisplayHome from "./DisplayHome";
 
 const HomePage = () => {
     const { audioRef, track, songsData } = useContext(PlayerContext);
@@ -12,7 +13,7 @@ const HomePage = () => {
           <>
             <div className="h-[90%] flex  ">
               <Sidebar />
-              <Display />
+              <DisplayHome />
             </div>
             <Player />
           </>
