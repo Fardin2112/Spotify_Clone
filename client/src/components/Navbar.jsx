@@ -6,7 +6,7 @@ import { useRef } from "react";
 
 const Navbar = ({ onClick, onNextClick }) => {
   const navigate = useNavigate(); 
-  const { user,logOut } = useFirebase();
+  const { user,LogOut } = useFirebase();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -73,7 +73,7 @@ const Navbar = ({ onClick, onNextClick }) => {
           {isDropdownOpen && (
             <div className="absolute top-full right-0 mt-2 w-48 bg-black text-white rounded-lg shadow-lg py-2 z-50">
               <button
-                onClick={logOut}
+                onClick={LogOut}
                 className="block w-full text-left px-4 py-2 hover:bg-gray-700"
               >
                 Logout

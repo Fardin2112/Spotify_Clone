@@ -66,9 +66,14 @@ export const FirebaseProvider = (props) => {
       .catch((e) => console.log(e));
   };
   // log out
-  const LogOut = () => {
-    return console.log("logout working")
-  }
+  const LogOut = async () => {
+    try {
+      await signOut(firebaseAuth);
+      navigate("/login"); // Redirect to login page after logout
+    } catch (error) {
+      console.log("Error Logging Out", error);
+    }
+  };
 
   return (
     <FirebaseContext.Provider
