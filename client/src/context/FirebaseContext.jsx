@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -64,10 +65,14 @@ export const FirebaseProvider = (props) => {
       .then(() => navigate("/"))
       .catch((e) => console.log(e));
   };
+  // log out
+  const LogOut = () => {
+    return console.log("logout working")
+  }
 
   return (
     <FirebaseContext.Provider
-      value={{ signupUserWithEmailandPassword, signupUserWithGoogle, signinUserWithEmailandPassword,user }}
+      value={{ signupUserWithEmailandPassword, signupUserWithGoogle, signinUserWithEmailandPassword,user,LogOut }}
     >
       {props.children}
     </FirebaseContext.Provider>

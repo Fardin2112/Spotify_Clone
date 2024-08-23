@@ -23,7 +23,6 @@ const RegisterPage = () => {
     }
   };
    
-
   return (
     <div className="w-full h-screen bg-black flex flex-col items-center">
       {/* Logo Section */}
