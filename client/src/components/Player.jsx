@@ -22,8 +22,8 @@ const Player = () => {
       <div className="hidden lg:flex items-center gap-4">
         <img className="w-12" src={track.image} alt="" />
         <div>
-          <p>{track.name}</p>
-          <p>{track.desc.slice(0, 12)}</p>
+          <p className="text-sm">{track.name}</p>
+          <p className="text-xs text-gray-400">{track.desc.slice(0, 25)}</p>
         </div>
       </div>
       <div className="flex flex-col items-center gap-1 m-auto">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import { useFirebase } from "../context/FirebaseContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const RegisterPage = () => {
@@ -89,12 +89,12 @@ const RegisterPage = () => {
             Sign up with Google
           </button>
         </div>
-        <div className="mt-8 ">
-          <hr className=" border-gray-600 mb-5" />
-          <span className="text-gray-500 font-semibold text-lg">
-            Already Have an account?
-          </span>
-          <span className=" font-semibold text-lg pl-1">Login in here</span>
+        <div className="mt-8 flex flex-col items-center">
+         
+          <p className="sm:block text-gray-500 font-semibold text-lg">
+            Don't Have an account?
+          </p>
+          <Link to="/Login"  className="sm:block font-semibold text-lg pl-1">Sign up for Spotify</Link>
         </div>
       </div>
       <footer className="w-[90%] sm:w-[400px] text-gray-500 px-4 sm:px-8 mt-3 text-xs sm:mb-5">This site is protected by reCAPTCHA and the Google

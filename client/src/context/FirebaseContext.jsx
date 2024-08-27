@@ -8,6 +8,8 @@ import {
   signInWithPopup,
   onAuthStateChanged,
   signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +25,7 @@ const firebaseConfig = {
   projectId: "spotify-clone-fcb24",
   storageBucket: "spotify-clone-fcb24.appspot.com",
   messagingSenderId: "38889198484",
-  appId: "1:38889198484:web:5a2249c917c0f78978f581"
+  appId: "1:38889198484:web:5a2249c917c0f78978f581",
 };
 
 // Initialize Firebase
@@ -33,37 +35,103 @@ const firebaseAuth = getAuth(firebasApp);
 export const useFirebase = () => useContext(FirebaseContext);
 
 export const FirebaseProvider = (props) => {
-
   // to check user is looged or signOut
   const [user, setUser] = useState(null);
-  useEffect(()=>{
-    onAuthStateChanged(firebaseAuth, (user)=>{
-      if (user){
+  useEffect(() => {
+    onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
         // logged in
-        setUser(user)
+        setUser(user);
       } else {
         // logged out
-        setUser(null) 
+        setUser(null);
       }
-    })
-  },[])
+    });
+  }, []);
 
   const navigate = useNavigate();
 
-  // Sign up using email and password
-  const signupUserWithEmailandPassword = (email, password) =>
-    createUserWithEmailAndPassword(firebaseAuth, email, password);
+  // Sign up using email and password with email verification
+  const signupUserWithEmailandPassword = (email, password) => {
+    createUserWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        if (user) {
+          sendEmailVerification(user).then(async () => {
+            await signOut(firebaseAuth);
+            navigate("/Login");
+            alert(
+              "Email verification sent to your Email ,please verify then login"
+            );
+            console.log(user.uid);
+          });
+        }
+      })
 
-  // sign up using email and password
-  const signinUserWithEmailandPassword = (email,password) => {
-    signInWithEmailAndPassword(firebaseAuth,email,password);
-  }
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
+
+  // Sign in using email and password
+  const signinUserWithEmailandPassword = async (email, password) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      if (user.emailVerified) {
+        console.log("Email is verified, proceed to app");
+        navigate("/"); // Redirect to your main page
+      } else {
+        alert("Please verify your email address before logging in.");
+        navigate("/Login");
+        await firebaseAuth.signOut(); // Sign out if email is not verified
+      }
+    } catch (error) {
+      console.error("Error signing in:", error);
+    }
+  };
 
   // Sign up/in using Google
   const signupUserWithGoogle = () => {
     return signInWithPopup(firebaseAuth, GoogleProvider)
       .then(() => navigate("/"))
       .catch((e) => console.log(e));
+  };
+  // User
+  const User = () => {
+    onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        const uid = user.uid;
+        console.log(uid);
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+  };
+  // Reset Password
+  const ResetPassword = (email) => {
+    sendPasswordResetEmail(firebaseAuth, email)
+      .then(() => {
+        // Password reset email sent!
+        // ..
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode,errorMessage)
+        // ..
+      });
   };
   // log out
   const LogOut = async () => {
@@ -77,7 +145,15 @@ export const FirebaseProvider = (props) => {
 
   return (
     <FirebaseContext.Provider
-      value={{ signupUserWithEmailandPassword, signupUserWithGoogle, signinUserWithEmailandPassword,user,LogOut }}
+      value={{
+        signupUserWithEmailandPassword,
+        signupUserWithGoogle,
+        signinUserWithEmailandPassword,
+        user,
+        LogOut,
+        User,
+        ResetPassword,
+      }}
     >
       {props.children}
     </FirebaseContext.Provider>

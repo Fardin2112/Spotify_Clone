@@ -1,7 +1,27 @@
-import react from "react";
+import react, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
+import { useFirebase } from "../context/FirebaseContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ForgotPage = () => {
+
+  const navigate = useNavigate();
+  const firebase = useFirebase();
+  const [email,setEmail] = useState("");
+
+  const handleSubmit = async (e) => {
+    console.log("resest click")
+    e.preventDefault();
+    try {
+      await firebase.ResetPassword(email);
+      alert("Password Reset link send to your mail");
+      navigate("/Login")
+      
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return (
     <div className="flex flex-col bg-black w-full h-screen text-white">
       {/* Logo of spotify and name */}
@@ -25,20 +45,23 @@ const ForgotPage = () => {
           <div className="mt-5">
             <label className="block text-base font-medium">Email</label>
             <input
+              onChange={ e => setEmail(e.target.value)} value ={email}
               className="mt-2 p-3 sm:p-5 font-semibold border-2  border-gray-600 block w-full h-10 rounded-sm bg-transparent text-gray-200 focus:ring-2 focus:ring-green-500"
               type="email"
               required
             />
           </div>
 
-          <button className="bg-[#1ed760] rounded-3xl w-full py-3 mt-8 text-black font-semibold text-lg hover:bg-green-700 transition duration-200">
+          <button onClick={handleSubmit} className="bg-[#1ed760] rounded-3xl w-full py-3 mt-8 text-black font-semibold text-lg hover:bg-green-700 transition duration-200">
             Send Link
           </button>
           <div className="flex justify-end items-end">
-          <p className=" text-gray-500 text-xs mt-8 ">This site is protected by reCAPTCHA and the Google
-          Privacy Policy and Terms of Service apply.</p>
+            <p className=" text-gray-500 text-xs mt-8 ">
+              This site is protected by reCAPTCHA and the Google Privacy Policy
+              and Terms of Service apply.
+            </p>
           </div>
-        </div>  
+        </div>
       </div>
     </div>
   );
