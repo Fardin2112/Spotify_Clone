@@ -1,4 +1,4 @@
-import PlaylistModel from '../models/PlaylistModel';
+import PlaylistModel from '../models/PlaylistModel.js';
 
 // Create a new playlist
 export const createPlaylist = async (req, res) => {

@@ -1,10 +1,5 @@
 import express from 'express';
-import {
-    createPlaylist,
-    addSongToPlaylist,
-    getUserPlaylists,
-    getSongsFromPlaylist
-} from '../controllers/playlistController';
+import { createPlaylist, addSongToPlaylist,getUserPlaylists,getSongsFromPlaylist} from '../controller/playlistController.js';
 
 const PlaylistRouter = express.Router();
 
