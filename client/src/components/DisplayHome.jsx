@@ -4,6 +4,7 @@ import AlbumItem from "./AlbumItem";
 import SongsItems from "./SongsItems";
 import { PlayerContext } from "../context/PlayerContext.jsx";
 import DisplayAlbum from "./DisplayAlbum.jsx";
+import MyPlaylist from "./MyPlaylist.jsx";
 
 const DisplayHome = () => {
   const displayRef = useRef();
@@ -72,6 +73,8 @@ const DisplayHome = () => {
                 />
               ))}
             </div>
+            <h1 className="my-5 font-bold text-2xl">My Playlist</h1>
+              <MyPlaylist/>
           </div>
         </>
       ) : (
