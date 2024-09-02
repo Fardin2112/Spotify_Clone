@@ -7,6 +7,7 @@ import ForgotPass from "./pages/ForgotPass";
 // change
 import DisplayHome from "./components/DisplayHome";
 import DisplayAlbum from "./components/DisplayAlbum";
+import MyPlaylist from "./components/MyPlaylist";
 
 axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
@@ -17,6 +18,7 @@ const App = () => {
     <Route path="/Register" element={<RegisterPage/>}/>
     <Route path="/Login" element={<LoginPage/>}/>
     <Route path="/Forgot" element={<ForgotPass/>}/>
+    <Route path="/myplaylist" element={<MyPlaylist/>}/>
   </Routes>
  )
 };
