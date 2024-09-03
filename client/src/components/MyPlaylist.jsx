@@ -1,16 +1,19 @@
 import { useFirebase } from '../context/FirebaseContext';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { PlayerContext } from '../context/PlayerContext';
 
 const MyPlaylist = () => {
+    const { songsData } = useContext(PlayerContext); // Use songsData from context
     const { user } = useFirebase();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [playlistTitle, setPlaylistTitle] = useState('');
     const [playlists, setPlaylists] = useState([]);
     const [selectedPlaylist, setSelectedPlaylist] = useState(null);
-    const [songLink, setSongLink] = useState('');
+    
 
+    // Function to create a new playlist
     const createPlaylist = async () => {
         if (!playlistTitle) {
             setError('Please enter a playlist title.');
@@ -26,7 +29,6 @@ const MyPlaylist = () => {
                 playlistTitle,
                 songs: []
             });
-            console.log(response.data);
             alert('Playlist created successfully!');
             fetchPlaylists(); // Refresh the playlist list after creation
         } catch (err) {
@@ -37,52 +39,61 @@ const MyPlaylist = () => {
         }
     };
 
+    // Function to fetch the user's playlists
     const fetchPlaylists = async () => {
         try {
             const response = await axios.get(`/api/playlist/list/${user.uid}`);
-            setPlaylists(response.data); // Correctly set the state with the fetched playlists
-            console.log("my playlist", response.data); // Log the actual response data
+            setPlaylists(response.data.flatMap(item => item.playlists)); // Flatten nested playlists
         } catch (err) {
             console.error('Error fetching playlists:', err);
             setError('Failed to fetch playlists. Please try again.');
         }
     };
 
-    const addSongToPlaylist = async () => {
-        if (!selectedPlaylist || !songLink) {
-            setError('Please select a playlist and enter a song link.');
+    // Function to add a song to the selected playlist
+    const addSongToPlaylist = async (songId) => {
+        console.log('Adding songId:', songId);
+        console.log('To playlistId:', selectedPlaylist._id);
+        console.log('By userId:', user.uid);
+    
+        if (!selectedPlaylist) {
+            setError('Please select a playlist.');
             return;
         }
-
+    
         setLoading(true);
         setError(null);
-
+    
         try {
-            const response = await axios.put('/api/playlist/update', {
-                userId: user.uid,
+            const response = await axios.post('/api/playlist/add-song', { // Make sure to use POST
                 playlistId: selectedPlaylist._id,
-                songLink
+                songId: songId, // ID of the song to add
+                songLink: songsData.find(song => song._id === songId)?.file // Find the song link based on songId
             });
-            console.log(response.data);
+            console.log('API Response:', response.data);
             alert('Song added successfully!');
-            fetchPlaylists(); // Refresh the playlist list after adding a song
+            fetchPlaylists();
         } catch (err) {
-            console.error('Error adding song to playlist:', err);
+            console.error('API Error:', err.response ? err.response.data : err.message);
             setError('Failed to add song. Please try again.');
         } finally {
             setLoading(false);
         }
     };
+    
+    
 
+    // Fetch playlists when the component mounts
     useEffect(() => {
         if (user) {
-            fetchPlaylists(); // Fetch playlists when the component mounts and user is available
+            fetchPlaylists();
         }
-    }, [user]); // Run the effect when user changes
+    }, [user]);
 
     return (
-        <div className='bg-gray-200 pt-4 pl-4 h-screen w-full'>
-            <div className='bg-gray-200 mt-5 ml-4'>
+        <div className='bg-gray-200 pt-4 pl-4 h-screen w-full text-black flex flex-col'>
+            <button>Create new Playlist</button>
+            <div className='bg-red-200 mt-5 ml-4'>
                 <input
                     type="text"
                     value={playlistTitle}
@@ -96,33 +107,28 @@ const MyPlaylist = () => {
             </div>
 
             <h1>My Playlists</h1>
-            <div>
-                <ul>
-                    {playlists.map((playlistData, index) => (
-                        playlistData.playlists.map((playlist) => (
-                            <li 
-                                key={`${playlistData._id}-${index}`} 
-                                onClick={() => setSelectedPlaylist(playlist)}
-                                style={{ cursor: 'pointer', marginBottom: '10px' }}
-                            >
-                                {playlist.playlistTitle}
-                            </li>
-                        ))
+            <div className='bg-green-400'>
+                <ul className='bg-red-600 text-black'>
+                    {playlists.map((playlist) => (
+                        <li key={playlist._id} onClick={() => setSelectedPlaylist(playlist)}>
+                            {playlist.playlistTitle}
+                        </li>
                     ))}
                 </ul>
 
                 {selectedPlaylist && (
                     <div>
                         <h2>Add Song to {selectedPlaylist.playlistTitle}</h2>
-                        <input
-                            type="text"
-                            value={songLink}
-                            onChange={(e) => setSongLink(e.target.value)}
-                            placeholder="Enter song link"
-                        />
-                        <button onClick={addSongToPlaylist} disabled={loading}>
-                            {loading ? 'Adding Song...' : 'Add Song'}
-                        </button>
+                        <ul>
+                            {songsData.map((song, index) => (
+                                <li key={index}>
+                                    {song.name} 
+                                    <button onClick={() => {console.log(song); addSongToPlaylist(song._id)}}>
+                                        Add
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
             </div>

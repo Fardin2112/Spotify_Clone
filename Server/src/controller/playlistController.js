@@ -18,21 +18,28 @@ export const createPlaylist = async (req, res) => {
 // Add a song to a playlist
 export const addSongToPlaylist = async (req, res) => {
     try {
-        const { playlistId } = req.body; // Assuming playlistId is sent in the body
-        const { songId, songLink } = req.body;
+        const { playlistId, songId, songLink } = req.body;
+
+        if (!playlistId || !songId || !songLink) {
+            return res.status(400).json({ message: 'Playlist ID, song ID, and song link are required' });
+        }
+
         const playlist = await PlaylistModel.findOneAndUpdate(
             { 'playlists._id': playlistId },
             { $push: { 'playlists.$.songs': { songId, songLink } } },
             { new: true }
         );
+
         if (!playlist) {
             return res.status(404).json({ message: 'Playlist not found' });
         }
+
         res.status(200).json({ message: 'Song added to playlist', playlist });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Get all playlists for a user
 export const getUserPlaylists = async (req, res) => {
