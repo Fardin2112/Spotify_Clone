@@ -15,6 +15,22 @@ export const createPlaylist = async (req, res) => {
     }
 };
 
+// get specific playlist by id
+export const getPlaylistById = async (req, res) => {
+    try {
+        const { playlistId } = req.params;
+        const playlist = await PlaylistModel.findOne({ 'playlists._id': playlistId });
+
+        if (!playlist) {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        res.status(200).json(playlist.playlists.id(playlistId));
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Add a song to a playlist
 export const addSongToPlaylist = async (req, res) => {
     try {

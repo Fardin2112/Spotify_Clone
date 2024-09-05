@@ -73,7 +73,6 @@ const DisplayHome = () => {
                 />
               ))}
             </div>
-            <h1 className="my-5 font-bold text-2xl">My Playlist</h1>
               <MyPlaylist/>
           </div>
         </>
