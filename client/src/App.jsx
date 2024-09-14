@@ -10,8 +10,8 @@ import DisplayHome from "./components/DisplayHome";
 import DisplayAlbum from "./components/DisplayAlbum";
 import MyPlaylist from "./components/MyPlaylist";
 
-axios.defaults.baseURL = "http://localhost:4000";
-// axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
+//.defaults.baseURL = "http://localhost:4000";
+ axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
 const App = () => {
  return (
