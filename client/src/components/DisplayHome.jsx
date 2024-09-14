@@ -5,14 +5,36 @@ import SongsItems from "./SongsItems";
 import { PlayerContext } from "../context/PlayerContext.jsx";
 import DisplayAlbum from "./DisplayAlbum.jsx";
 import MyPlaylist from "./MyPlaylist.jsx";
+import axios from "axios";
 
 const DisplayHome = () => {
   const displayRef = useRef();
-  const { songsData, albumsData } = useContext(PlayerContext);
+  const { setTrack} = useContext(PlayerContext);
+  const [allSong,setAllSong] = useState([]);
+  const [albumsData, setAlbumsData] = useState([]);
+  const [albumData,setAlbumData] = useState([]);
 
   const [albumId, setAlbumId] = useState(null);
   const [lastOpenedAlbumId, setLastOpenedAlbumId] = useState(null);
 
+  useEffect(() => {
+    const getAlbum = async () => {
+      try {
+          const responce = await axios.get('/api/album/list')
+
+          if (responce.data.success){
+              setAlbumsData(responce.data.albums)
+          }
+          else {
+              console.log("something went wrong in fetching album")
+          }
+      } catch (error) {
+          console.log(error)
+      }
+  }
+  getAlbum();
+  }, []);
+  
   // Handle going back to home
   const handleBack = () => {
     setLastOpenedAlbumId(albumId); // Store the current album ID before navigating back
@@ -32,15 +54,29 @@ const DisplayHome = () => {
       : "#121212";
 
   useEffect(() => {
+    const getSong = async() => {
+      try {
+          const responce = await axios.get('/api/song/list');
+  
+          if (responce.data.success){
+              setAllSong(responce.data.songs)
+              setTrack(responce.data.songs[0])
+          }
+      } catch (error) {
+          console.log(error)
+      }
+      
+  }
+    getSong();
     if (albumId) {
       displayRef.current.style.background = `linear-gradient(${backgroundColor},#121212)`;
     } else {
       displayRef.current.style.background = `#121212`;
     }
-  });
+  },[]);
 
   return (
-    <div ref={displayRef} className={`w-[100%] m-2 px-6 pt-2 rounded bg-[#${backgroundColor}] text-white overflow-auto lg:w-[75%] lg:ml-0`}>
+    <div ref={displayRef} className={`w-[100%] m-2 px-6 pt-2 rounded bg-${backgroundColor} text-white overflow-auto lg:w-[75%] lg:ml-0`}>
       {!albumId ? (
         <>
           <Navbar onNextClick={handleNext} />
@@ -56,6 +92,7 @@ const DisplayHome = () => {
                   id={item._id}
                   onclick={() => {
                     setAlbumId(item._id);
+                    setAlbumData(item)
                     setLastOpenedAlbumId(item._id);
                   }}
                 />
@@ -63,13 +100,15 @@ const DisplayHome = () => {
             </div>
             <h1 className="my-5 font-bold text-2xl">Today's biggest hit</h1>
             <div className="flex overflow-auto">
-              {songsData.map((item, index) => (
+              {allSong.map((item, index) => (
                 <SongsItems 
                   key={index}
                   name={item.name}
                   image={item.image}
                   desc={item.desc} 
                   id={item._id}
+                  SongitemData={item}
+                  list={allSong}
                 />
               ))}
             </div>
@@ -79,7 +118,7 @@ const DisplayHome = () => {
       ) : (
         <>
           <Navbar onClick={handleBack} />
-          <DisplayAlbum id={albumId} />
+          <DisplayAlbum album={albumData} />
         </>
       )}
     </div>

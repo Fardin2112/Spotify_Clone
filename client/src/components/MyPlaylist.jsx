@@ -50,7 +50,9 @@ const MyPlaylist = () => {
   const fetchPlaylists = async () => {
     try {
       const response = await axios.get(`/api/playlist/list/${user.uid}`);
+      if (response.data) {
       setPlaylists(response.data.flatMap((item) => item.playlists)); // Flatten nested playlists
+      }
     } catch (err) {
       console.error("Error fetching playlists:", err);
       setError("Failed to fetch playlists. Please try again.");
@@ -147,26 +149,6 @@ const MyPlaylist = () => {
             </div>
           </div>
         ))}
-        {/* {selectedPlaylist && (
-          <div>
-            <h2>Add Song to {selectedPlaylist.playlistTitle}</h2>
-            <ul>
-              {songsData.map((song, index) => (
-                <li key={index}>
-                  {song.name}
-                  <button
-                    onClick={() => {
-                      console.log(song);
-                      addSongToPlaylist(song._id);
-                    }}
-                  >
-                    Add
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )} */}
       </div>
     </div>
   );

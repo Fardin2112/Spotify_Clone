@@ -54,4 +54,9 @@ const removeSong = async (req,res) => {
         res.json({success:false})
     }
 }
+// const getSong = async (req,res) => {
+//   try {
+//     await
+//   }
+// }
 export { addSong, listSong, removeSong, };

@@ -1,4 +1,4 @@
-import { createContext , useEffect, useRef, useState } from 'react'
+import { createContext , useCallback, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
 export const PlayerContext = createContext();
@@ -10,7 +10,7 @@ const PlayerContextProvider = (props) => {
     const seekBar = useRef();
 
     const [songsData,setSongsData] = useState([]);
-    const [albumsData,setAlbumsdata] = useState([]);
+   // const [albumsData,setAlbumsdata] = useState([]);
     const [track,setTrack] = useState();
     const [playStatus,setplayStatus] = useState(false);
 
@@ -20,8 +20,8 @@ const PlayerContextProvider = (props) => {
     });
     
     // from here we can pause and play song 
-    const play = () => {
-        audioRef.current.play();
+    const play = async () => {
+        await audioRef.current.play();
         setplayStatus(true);
     }
     const pause = () => {
@@ -29,15 +29,15 @@ const PlayerContextProvider = (props) => {
         setplayStatus(false);
     }
     // for play any song by click (by ID)
-    const playWithId = async (id) => {
-        await songsData.map((item) => {
-            if (id == item._id) {
-                setTrack(item)
-            }
-        })
-        await audioRef.current.play()
-        setplayStatus(true);
-    }
+    // const playWithId = async (id) => {
+    //     await songsData.map((item) => {
+    //         if (id == item._id) {
+    //             setTrack(item)
+    //         }
+    //     })
+    //     await audioRef.current.play()
+    //     setplayStatus(true);
+    // }
     // this is used to previous any song
     const previous = async () => {
        
@@ -51,7 +51,7 @@ const PlayerContextProvider = (props) => {
         })
     }
     // this is used to next any song
-    const next = async () => {
+    const next = useCallback( async () => {
         const currentIndex = songsData.findIndex(item => item._id === track._id);
     
         if (currentIndex !== -1) {
@@ -68,38 +68,25 @@ const PlayerContextProvider = (props) => {
                 setplayStatus(true);
             }, 100); // 100ms delay to ensure state update
         }
-    };
+    },[songsData,track]);
     // for seekbar click playing by that duration
     const seekSong = async (e)=> {
         audioRef.current.currentTime = ((e.nativeEvent.offsetX / seekBg.current.offsetWidth)*audioRef.current.duration)
     }
-    const getSong = async() => {
-        try {
-            const responce = await axios.get('/api/song/list');
+    // const getSong = async() => {
+    //     try {
+    //         const responce = await axios.get('/api/song/list');
 
-            if (responce.data.success){
-                setSongsData(responce.data.songs)
-                setTrack(responce.data.songs[0])
-            }
-        } catch (error) {
-            console.log(error)
-        }
+    //         if (responce.data.success){
+    //             setSongsData(responce.data.songs)
+    //             setTrack(responce.data.songs[0])
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
         
-    }
-    const getAlbum = async () => {
-        try {
-            const responce = await axios.get('/api/album/list')
-
-            if (responce.data.success){
-                setAlbumsdata(responce.data.albums)
-            }
-            else {
-                console.log("something went wrong in fetching album")
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // }
+   
     // logic for seekbar time
     useEffect(() => {
         const audio = audioRef.current;
@@ -141,12 +128,12 @@ const PlayerContextProvider = (props) => {
                 audio.removeEventListener('ended', handleEnded);
             };
         }
-    }, [track]);
+    }, [next]);
 
-    useEffect(()=>{
-        getSong();
-        getAlbum();
-    },[])
+    // useEffect(()=>{
+    //     //getSong();
+    //     getAlbum();
+    // },[])
  
     // this contextValue wrap with playercontext provider or export in all compenent  
     const contextValue = {
@@ -157,10 +144,12 @@ const PlayerContextProvider = (props) => {
         playStatus,setplayStatus,
         time,setTime,
         play,pause,
-        playWithId,
+        //playWithId,
         previous , next,
         seekSong,
-        songsData,albumsData
+        songsData,
+        // albumsData,
+        setSongsData,
     }
 
     return (

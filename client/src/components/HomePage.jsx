@@ -1,13 +1,33 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Sidebar from "./Sidebar";
 import Player from "./Player";
 //import Display from "./Display";
 import { PlayerContext } from "../context/PlayerContext";
 import DisplayHome from "./DisplayHome";
 import SyncLoader from "react-spinners/SyncLoader";
+import axios from "axios";
+import { useEffect } from "react";
 
 const HomePage = () => {
-  const { audioRef, track, songsData } = useContext(PlayerContext);
+  const { audioRef, track,setTrack } = useContext(PlayerContext);
+  const [songsData,setSongsData] = useState([]);
+  
+  useEffect(()=>{
+    const getSong = async() => {
+      try {
+          const responce = await axios.get('/api/song/list');
+  
+          if (responce.data.success){
+              setSongsData(responce.data.songs)
+             // setTrack(responce.data.songs[0])
+          }
+      } catch (error) {
+          console.log(error)
+      }
+      
+  }
+    getSong()
+  },[setSongsData,setTrack])
   return (
     <div className="h-screen bg-black">
       {songsData.length !== 0 ? (

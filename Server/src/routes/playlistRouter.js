@@ -16,6 +16,6 @@ PlaylistRouter.get('/list/:userId', getUserPlaylists);
 PlaylistRouter.get('/playlist/:playlistId', getPlaylistById);
 
 // Get all songs from a specific playlist for a user
-PlaylistRouter.get('/list/:userId/:playlistId/songs', getSongsFromPlaylist);
+PlaylistRouter.post('/songs', getSongsFromPlaylist);
 
 export default PlaylistRouter;
