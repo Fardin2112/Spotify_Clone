@@ -1,19 +1,18 @@
+// allSong is All data of song
+// albumdata is album details which open
+// albumSong is all SOng which is in Album
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { assets } from "../assets/assets";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import { PlayerContext } from "../context/PlayerContext";
 
 const DisplayAlbum = ({ album }) => {
-  const {setSongsData,setTrack,play} = useContext(PlayerContext);
-  
-  // const { id } = useParams();
 
-  // const { playWithId, songsData, albumsData, setSongsData } = useContext(PlayerContext);
+  const {setSongsData,setTrack,play} = useContext(PlayerContext);
+
   const [albumSong, setAlbumSong] = useState([]);
   const [albumData, setAlbumData] = useState({});
-  // const [allSong, setAllSong] = useState([]);
 
   useEffect(() => {
     const getAlbum = async () => {
@@ -39,9 +38,9 @@ const DisplayAlbum = ({ album }) => {
     getAlbum();
   },[]); // Removed dependency on allSong
 
-  const handleOnClick = (Song) => {
-    setSongsData(albumSong);
-    setTrack(Song)
+  const handleOnClick = async (Song) => {
+    await setSongsData(albumSong);
+    await setTrack(Song)
     play()
   }
 

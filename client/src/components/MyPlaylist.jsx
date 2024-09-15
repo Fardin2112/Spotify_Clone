@@ -11,7 +11,7 @@ const MyPlaylist = () => {
   const handlePlaylistClick = (playlist) => {
     navigate(`/playlist/${playlist._id}`);
   };
-  const { songsData } = useContext(PlayerContext); // Use songsData from context
+  const { songsData} = useContext(PlayerContext); // Use songsData from context
   const { user } = useFirebase();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -134,19 +134,18 @@ const MyPlaylist = () => {
       )}
 
       {/* <h1>My Playlists</h1> */}
-      <div className=" grid grid-cols-2 gap-4 mt-6">
+      <div className="flex overflow-auto">
         {playlists.map((playlist) => (
           <div
-            className=" bg-[#ffffff26] hover:bg-gray-500 rounded-md"
+            className="min-w-[175px] max-w-[175px] p-2 px-3 pl-0 mr-2 rounded cursor-pointer hover:bg-[#ffffff26]"
             key={playlist._id}
             onClick={() => {
               setSelectedPlaylist(playlist);
               handlePlaylistClick(playlist);
             }}
-          ><div className="flex items-center cursor-pointer">
-            <img className="w-14 mr-2" src={assets.playlistCover} alt="AlbumCover img" />
-            <h2 className="font-semibold">{playlist.playlistTitle}</h2>
-            </div>
+          >
+            <img className="rounded" src={assets.playlistCover} alt="AlbumCover img" />
+            <h2 className="font-bold mt-2 mb-1 flex justify-center">{playlist.playlistTitle}</h2>
           </div>
         ))}
       </div>

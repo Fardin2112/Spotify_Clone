@@ -13,6 +13,8 @@ const PlayerContextProvider = (props) => {
    // const [albumsData,setAlbumsdata] = useState([]);
     const [track,setTrack] = useState();
     const [playStatus,setplayStatus] = useState(false);
+    // for remove nex pre button from playlis
+    const [buttonTrue,setButtonTrue] = useState(false);
 
     const [time, setTime] = useState({
         currentTime: { second: 0, minute: 0 },
@@ -21,6 +23,7 @@ const PlayerContextProvider = (props) => {
     
     // from here we can pause and play song 
     const play = async () => {
+        setplayStatus(false)
         await audioRef.current.play();
         setplayStatus(true);
     }
@@ -150,6 +153,8 @@ const PlayerContextProvider = (props) => {
         songsData,
         // albumsData,
         setSongsData,
+        setButtonTrue,
+        buttonTrue,
     }
 
     return (

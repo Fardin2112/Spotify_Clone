@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFirebase } from "../context/FirebaseContext"; // Assuming this is for auth
 import { assets } from "../assets/assets";
 import { useRef } from "react";
+import { PlayerContext } from "../context/PlayerContext";
 
 const Navbar = ({ onClick, onNextClick }) => {
+  const {buttonTrue} = useContext(PlayerContext)
   const navigate = useNavigate(); 
   const { user,LogOut } = useFirebase();
 
@@ -36,7 +38,7 @@ const Navbar = ({ onClick, onNextClick }) => {
   return (
     <div className="w-full flex justify-between items-center p-4 font-semibold">
       {/* Navigation buttons */}
-      <div className="flex items-center gap-2">
+      <div className={`flex items-center gap-2 ${!buttonTrue?"visible":"hidden"}`}>
         {/* Back Button */}
         <img
           onClick={onClick} // Go back to the previous view (e.g., homepage)

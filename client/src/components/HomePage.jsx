@@ -9,10 +9,11 @@ import axios from "axios";
 import { useEffect } from "react";
 
 const HomePage = () => {
-  const { audioRef, track,setTrack } = useContext(PlayerContext);
+  const { audioRef, track,setTrack,setButtonTrue } = useContext(PlayerContext);
   const [songsData,setSongsData] = useState([]);
   
   useEffect(()=>{
+    setButtonTrue(false)
     const getSong = async() => {
       try {
           const responce = await axios.get('/api/song/list');
@@ -27,7 +28,7 @@ const HomePage = () => {
       
   }
     getSong()
-  },[setSongsData,setTrack])
+  },[setSongsData,setTrack,setButtonTrue])
   return (
     <div className="h-screen bg-black">
       {songsData.length !== 0 ? (

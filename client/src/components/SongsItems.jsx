@@ -5,9 +5,9 @@ import { PlayerContext } from '../context/PlayerContext'
 const SongsItems = ({name,image,desc,id,SongitemData,list}) => {
 
   const {setSongsData,setTrack,play} = useContext(PlayerContext);
-  const handleOnClick = () => {
-    setSongsData(list);
-    setTrack(SongitemData)
+  const handleOnClick = async () => {
+    await setSongsData(list);
+    await setTrack(SongitemData)
     play()
   }
 

@@ -32,10 +32,10 @@ connectCloudinary();
 //middleware
 app.use(express.json()) // whenever we get any req that req pass from this express method
 app.use(cors()) // using this if or backend and frontend running diff number even we can run
-app.use((res,req,next)=>{
-    console.log(req.path,req.method);
+app.use('/api/playlist', (req, res, next) => {
+    console.log(`Request received at ${req.method} ${req.path}`);
     next();
-})
+  }, PlaylistRouter);
 
 // intitializing routes
 app.use('/api/song',songRouter);

@@ -100,20 +100,23 @@ export const getUserPlaylists = async (req, res) => {
 };
 
 // Get all songs from a specific playlist for a user
+// In your backend
 export const getSongsFromPlaylist = async (req, res) => {
   const { playlistId } = req.body;
-  console.log(playlistId);
+  console.log("playlist id :",playlistId);
   try {
     const playlist = await PlaylistModel.findOne(
-      { "playlists._id": playlistId }
-      //{ 'playlists.$.songs': 1 } // Only return the songs field
+      { "playlists._id": playlistId },
+      //{ "playlists.$": 1 } // Only return the songs field
     );
-    console.log(playlist);
+    console.log(playlist)
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
     res.status(200).json(playlist.playlists[0].songs);
   } catch (error) {
+    console.log("failed to fetch playlist song ", error)
     res.status(500).json({ error: error.message });
   }
 };
+
