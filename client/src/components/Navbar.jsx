@@ -36,8 +36,9 @@ const Navbar = ({ onClick, onNextClick }) => {
   }, [isDropdownOpen]);
 
   return (
-    <div className="w-full flex justify-between items-center p-4 font-semibold">
+    <div className="w-full flex items-center p-4 font-semibold justify-between">
       {/* Navigation buttons */}
+      <div className="">
       <div className={`flex items-center gap-2 ${!buttonTrue?"visible":"hidden"}`}>
         {/* Back Button */}
         <img
@@ -55,19 +56,20 @@ const Navbar = ({ onClick, onNextClick }) => {
           alt="Go Forward"
         />
       </div>
+      </div>
 
       {/* Auth buttons or user avatar */}
       {user ? (
   <div className="flex items-center gap-4 relative">
     <p className="bg-white text-black rounded-2xl text-[15px] px-4 py-1 hidden md:block cursor-pointer">
       Explore Premium
-    </p>
+    </p> 
     <p className="bg-black rounded-2xl text-[15px] px-3 py-1 cursor-pointer">
       Install App
     </p>
     <div className="relative" ref={dropdownRef}>
           <div 
-            className="bg-purple-500 text-black rounded-full w-7 h-7 flex items-center justify-center cursor-pointer"
+            className="bg-purple-500 text-black rounded-full w-7 h-7 lg:w-10 lg:h-10 flex items-center justify-center cursor-pointer"
             onClick={handleDropdownToggle}
           >
             {user.displayName ? user.displayName.charAt(0) : "U"}

@@ -38,6 +38,7 @@ const MyPlaylist = () => {
       });
       alert("Playlist created successfully!");
       fetchPlaylists(); // Refresh the playlist list after creation
+      setShowCreatePlaylist(false)
     } catch (err) {
       console.error("Error creating playlist:", err);
       setError("Failed to create playlist. Please try again.");
@@ -102,7 +103,7 @@ const MyPlaylist = () => {
   }, [user]);
 
   return (
-    <div className=" pt-4 pl-2 pr-2 w-full text-white flex flex-col font-sans">
+    <div className=" pt-4 w-full text-white flex flex-col font-sans">
       <div className="flex w-full justify-between items-center">
         <h1 className="text-2xl font-bold">My Playlist</h1>
       <button
@@ -137,7 +138,7 @@ const MyPlaylist = () => {
       <div className="flex overflow-auto">
         {playlists.map((playlist) => (
           <div
-            className="min-w-[175px] max-w-[175px] p-2 px-3 pl-0 mr-2 rounded cursor-pointer hover:bg-[#ffffff26]"
+            className="min-w-[175px] max-w-[175px] p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26]"
             key={playlist._id}
             onClick={() => {
               setSelectedPlaylist(playlist);

@@ -100,14 +100,11 @@ export const getUserPlaylists = async (req, res) => {
 };
 
 // Get all songs from a specific playlist for a user
-// In your backend
 export const getSongsFromPlaylist = async (req, res) => {
   const { playlistId } = req.body;
-  console.log("playlist id :",playlistId);
   try {
     const playlist = await PlaylistModel.findOne(
       { "playlists._id": playlistId },
-      //{ "playlists.$": 1 } // Only return the songs field
     );
     console.log(playlist)
     if (!playlist) {
@@ -119,4 +116,49 @@ export const getSongsFromPlaylist = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// delete a Song from playlist
+export const deleteSongFromPlaylist = async (req, res) => {
+  try {
+    const { playlistId, songId } = req.body;
+    console.log("Request to delete song", playlistId, songId);
+
+    // Find the playlist by playlistId
+    const playlist = await PlaylistModel.findOne({
+      "playlists._id": playlistId,
+    });
+
+    if (!playlist) {
+      return res.status(404).json({ success: false, message: "Playlist not found" });
+    }
+
+    // Get the specific playlist object
+    const selectedPlaylist = playlist.playlists.id(playlistId);
+
+    if (!selectedPlaylist) {
+      return res.status(404).json({ success: false, message: "Playlist not found" });
+    }
+
+    // Find the index of the song in the playlist
+    const songIndex = selectedPlaylist.songs.findIndex(
+      (song) => song._id.toString() === songId
+    );
+
+    if (songIndex === -1) {
+      return res.status(404).json({ success: false, message: "Song not found in the playlist" });
+    }
+
+    // Remove the song from the playlist
+    selectedPlaylist.songs.splice(songIndex, 1);
+
+    // Save the updated playlist
+    await playlist.save();
+
+    res.status(200).json({ success: true, message: "Song removed from playlist successfully" });
+  } catch (error) {
+    console.error("Error deleting song from playlist:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 

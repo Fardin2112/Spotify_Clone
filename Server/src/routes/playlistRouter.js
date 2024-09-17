@@ -1,5 +1,5 @@
 import express from 'express';
-import { createPlaylist, addSongToPlaylist,getUserPlaylists,getSongsFromPlaylist,getPlaylistById} from '../controller/playlistController.js';
+import { createPlaylist, addSongToPlaylist,getUserPlaylists,getSongsFromPlaylist,getPlaylistById,deleteSongFromPlaylist} from '../controller/playlistController.js';
 
 const PlaylistRouter = express.Router();
 
@@ -17,5 +17,8 @@ PlaylistRouter.get('/playlist/:playlistId', getPlaylistById);
 
 // Get all songs from a specific playlist for a user
 PlaylistRouter.post('/songs', getSongsFromPlaylist);
+
+// delete a Song from playlist 
+PlaylistRouter.post('/remove-song',deleteSongFromPlaylist)
 
 export default PlaylistRouter;

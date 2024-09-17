@@ -43,6 +43,7 @@ import song1 from  './song1.mp3'
 import song2 from  './song2.mp3'
 import song3 from  './song3.mp3'
 import playlistCover from './img.jpg';
+import threeDot from './3dot.png';
 
 export const assets = {
     GoogleLogo,
@@ -70,7 +71,8 @@ export const assets = {
     arrow_right,
     spotify_logo,
     clock_icon,
-    playlistCover
+    playlistCover,
+    threeDot
 }
 
 export const albumsData = [
