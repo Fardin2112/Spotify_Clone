@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect, useContext, useRef } from "react";
+import { useParams ,Navigate, useNavigate} from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Player from "../components/Player";
@@ -7,6 +7,7 @@ import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 
 const PlaylistDetail = () => {
+  const navigate = useNavigate();
 
   const {setSongsData,setTrack,audioRef, track,play,setButtonTrue} = useContext(PlayerContext);
   const { playlistId } = useParams();
@@ -16,6 +17,10 @@ const PlaylistDetail = () => {
   const [error, setError] = useState(null);
   const [allSong,setAllSong] = useState([]);
   const [clickedSongId, setClickedSongId] = useState(null)
+  const [showDeleteButton,setShowDeleteButton] = useState(false);
+
+  // Ref to track the three-dot button for the playlist delete menu
+  const deleteButtonRef = useRef(null);
 
   // cal total length of playlist
   const getTotalDuration = (songs) => {
@@ -82,9 +87,9 @@ useEffect(() => {
     const fetchPlaylistSongs = async () => {
       setLoading(true);
       try {
-        console.log("playlistId used in fetching playlist song",playlistId)
+       // console.log("playlistId used in fetching playlist song",playlistId)
         const response = await axios.post(`/api/playlist/songs`,{playlistId});
-        console.log(response.data)
+        //console.log(response.data)
         setPlaylistSongs(response.data);
         setTrack(response.data[0])
       } catch (err) {
@@ -117,28 +122,35 @@ useEffect(() => {
     }
   };
 
-  const deletePlaylist = async () => {
+  const deletePlaylist = async (playlistId) => {
     setLoading(true);
     try {
+      console.log("from frontend",playlistId)
       await axios.delete(`/api/playlist/delete/${playlistId}`);
       alert("Playlist deleted successfully!");
       // Redirect or refresh
+      navigate('/')
     } catch (err) {
       setError("Failed to delete playlist.");
     } finally {
       setLoading(false);
     }
   };
+
   const handleClick = async (song) => {
     await setSongsData(playlistSongs)
     await setTrack(song);
     play()
   }
+  // Toggle delete button visibility
+  const toggleDeleteButton = () => {
+    setShowDeleteButton(!showDeleteButton);
+  };
+  
   // delete song from playlist
   const deleteSong = async (songId) => {
     setLoading(true);
     try {
-      console.log(playlistId,songId);
       const response = await axios.post('/api/playlist/remove-song', {
         playlistId,
         songId
@@ -152,6 +164,19 @@ useEffect(() => {
       setLoading(false);
     }
   };
+  // Add an event listener for clicks outside the delete button
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (deleteButtonRef.current && !deleteButtonRef.current.contains(event.target)) {
+        setShowDeleteButton(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-full h-screen flex flex-col bg-gradient-to-b from-blue-500 to-black text-white font-bold p-3">
@@ -161,7 +186,20 @@ useEffect(() => {
         <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-center mb-6">
         <img className="w-48 rounded" src={assets.playlistCover} alt="" />
         <div>
+          <div className="flex justify-between items-center">
           <p>Playlist</p>
+          <div className="items-end"ref={deleteButtonRef}>
+          <p onClick={toggleDeleteButton} className="flex justify-end"><img className="w-10 h-10" src={assets.threeDot} alt="dot" /></p>
+          {showDeleteButton && (
+                  <button
+                    className="text-white bg-red-500 mt-2 px-3 py-1 rounded w-36 hover:bg-red-700"
+                    onClick={()=>deletePlaylist(playlistId)}
+                  >
+                    Delete Playlist
+                  </button>
+                )}
+                </div>
+          </div>
           <h2 className="text-5xl font-bold mb-4 md:text-7xl">
             {playlist? playlist.playlistTitle :""}
           </h2>
@@ -213,7 +251,7 @@ useEffect(() => {
               </div>
             ))
           ) : (
-            <p>No songs in this playlist.</p>
+            <p className="text-gray-400 ml-3">Add Songs in your favourite playlist from Recommended Songs</p>
           )}
           <h1 className="text-xl lg:text-2xl ml-2 text-gray-200">Recommended Songs</h1>
           {allSong.map((item, index) => (

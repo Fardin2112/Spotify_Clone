@@ -8,17 +8,18 @@ import { assets } from "../assets/assets";
 const MyPlaylist = () => {
   const navigate = useNavigate();
 
-  const handlePlaylistClick = (playlist) => {
-    navigate(`/playlist/${playlist._id}`);
-  };
-  const { songsData} = useContext(PlayerContext); // Use songsData from context
   const { user } = useFirebase();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [playlistTitle, setPlaylistTitle] = useState("");
   const [playlists, setPlaylists] = useState([]);
-  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
+
+  // navigate to display playlistDetails
+  const handlePlaylistClick = (playlist) => {
+    navigate(`/playlist/${playlist._id}`);
+  };
+  
 
   // Function to create a new playlist
   const createPlaylist = async () => {
@@ -57,41 +58,6 @@ const MyPlaylist = () => {
     } catch (err) {
       console.error("Error fetching playlists:", err);
       setError("Failed to fetch playlists. Please try again.");
-    }
-  };
-
-  // Function to add a song to the selected playlist
-  const addSongToPlaylist = async (songId) => {
-    console.log("Adding songId:", songId);
-    console.log("To playlistId:", selectedPlaylist._id);
-    console.log("By userId:", user.uid);
-
-    if (!selectedPlaylist) {
-      setError("Please select a playlist.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.post("/api/playlist/add-song", {
-        // Make sure to use POST
-        playlistId: selectedPlaylist._id,
-        songId: songId, // ID of the song to add
-        songLink: songsData.find((song) => song._id === songId)?.file, // Find the song link based on songId
-      });
-      console.log("API Response:", response.data);
-      alert("Song added successfully!");
-      fetchPlaylists();
-    } catch (err) {
-      console.error(
-        "API Error:",
-        err.response ? err.response.data : err.message
-      );
-      setError("Failed to add song. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -141,7 +107,7 @@ const MyPlaylist = () => {
             className="min-w-[175px] max-w-[175px] p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26]"
             key={playlist._id}
             onClick={() => {
-              setSelectedPlaylist(playlist);
+              //setSelectedPlaylist(playlist);
               handlePlaylistClick(playlist);
             }}
           >

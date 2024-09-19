@@ -1,5 +1,5 @@
 import express from 'express';
-import { createPlaylist, addSongToPlaylist,getUserPlaylists,getSongsFromPlaylist,getPlaylistById,deleteSongFromPlaylist} from '../controller/playlistController.js';
+import { createPlaylist, addSongToPlaylist,getUserPlaylists,getSongsFromPlaylist,getPlaylistById,deleteSongFromPlaylist,deletePlaylist} from '../controller/playlistController.js';
 
 const PlaylistRouter = express.Router();
 
@@ -20,5 +20,8 @@ PlaylistRouter.post('/songs', getSongsFromPlaylist);
 
 // delete a Song from playlist 
 PlaylistRouter.post('/remove-song',deleteSongFromPlaylist)
+
+// to delete playlist
+PlaylistRouter.delete('/delete/:playlistId',deletePlaylist)
 
 export default PlaylistRouter;

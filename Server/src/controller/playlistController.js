@@ -1,5 +1,6 @@
 import { response } from "express";
 import PlaylistModel from "../models/PlaylistModel.js";
+import playlistModel from "../models/PlaylistModel.js";
 
 // Create a new playlist
 export const createPlaylist = async (req, res) => {
@@ -106,7 +107,6 @@ export const getSongsFromPlaylist = async (req, res) => {
     const playlist = await PlaylistModel.findOne(
       { "playlists._id": playlistId },
     );
-    console.log(playlist)
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
@@ -121,7 +121,7 @@ export const getSongsFromPlaylist = async (req, res) => {
 export const deleteSongFromPlaylist = async (req, res) => {
   try {
     const { playlistId, songId } = req.body;
-    console.log("Request to delete song", playlistId, songId);
+    //console.log("Request to delete song", playlistId, songId);
 
     // Find the playlist by playlistId
     const playlist = await PlaylistModel.findOne({
@@ -160,5 +160,52 @@ export const deleteSongFromPlaylist = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+
+
+// delete playlist
+export const deletePlaylist = async (req, res) => {
+  try {
+    const { playlistId } = req.params;
+    console.log("Playlist ID:", playlistId);
+
+    // Find the document containing the playlist
+    const playlist = await PlaylistModel.findOne({
+      "playlists._id": playlistId,
+    });
+
+    if (!playlist) {
+      return res.status(404).json({ message: "Playlist not found" });
+    }
+
+    // Find the index of the playlist to be deleted within the user's playlists array
+    const index = playlist.playlists.findIndex(
+      (p) => p._id.toString() === playlistId
+    );
+
+    if (index === -1) {
+      return res.status(404).json({ message: "Playlist not found" });
+    }
+
+    // Remove the playlist using the index
+    playlist.playlists.splice(index, 1);
+
+    // Save the updated document
+    await playlist.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Playlist deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error in deleting playlist:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete playlist",
+      error,
+    });
+  }
+};
+
 
 
