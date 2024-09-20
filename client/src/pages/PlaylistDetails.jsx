@@ -82,26 +82,35 @@ useEffect(() => {
 }, [playlistSongs]);
 
 
-  // Fetch songs from the playlist
-  useEffect(() => {
-    const fetchPlaylistSongs = async () => {
-      setLoading(true);
-      try {
-       // console.log("playlistId used in fetching playlist song",playlistId)
-        const response = await axios.post(`/api/playlist/songs`,{playlistId});
-        //console.log(response.data)
-        setPlaylistSongs(response.data);
-        setTrack(response.data[0])
-      } catch (err) {
-        console.log("failed to fetch playlist songs frontend", err)
-        setError("Failed to fetch playlist songs.",err);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchPlaylistSongs = async () => {
+    setLoading(true);
+    try {
+      if (playlistId) {
+        console.log("Fetching songs for playlistId:", playlistId);
+        const response = await axios.post(`/api/playlist/songs`, {playlistId});
+        console.log("Fetched songs:", response.data);
+        if (response.data && response.data.length > 0) {
+          setPlaylistSongs(response.data);
+          setTrack(response.data[0]);
+        } else {
+          setPlaylistSongs([]);
+          setTrack(null);
+        }
+      } else {
+        console.warn("No playlistId provided.");
       }
-    };
+    } catch (err) {
+      console.log("Failed to fetch playlist songs frontend", err);
+      setError("Failed to fetch playlist songs.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPlaylistSongs();
-  }, [playlistId,setTrack,]);
+  fetchPlaylistSongs();
+}, [playlistId, setTrack]);
+
 
   const addSong = async (song) => {
     setLoading(true);

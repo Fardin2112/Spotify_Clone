@@ -7,7 +7,7 @@ import ForgotPass from "./pages/ForgotPass";
 import PlaylistDetails from "./pages/PlaylistDetails"
 
 
- //axios.defaults.baseURL = "http://localhost:4000";
+ // axios.defaults.baseURL = "http://localhost:4000";
  axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
 const App = () => {

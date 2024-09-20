@@ -103,19 +103,35 @@ export const getUserPlaylists = async (req, res) => {
 // Get all songs from a specific playlist for a user
 export const getSongsFromPlaylist = async (req, res) => {
   const { playlistId } = req.body;
+  console.log("backend id", playlistId);
+
   try {
-    const playlist = await PlaylistModel.findOne(
-      { "playlists._id": playlistId },
-    );
-    if (!playlist) {
+    // Find the user document containing the playlists with the given playlistId
+    const playlistData = await PlaylistModel.findOne({ "playlists._id": playlistId });
+    
+    // If the user document containing the playlist is not found, send a 404 response
+    if (!playlistData) {
       return res.status(404).json({ message: "Playlist not found" });
     }
-    res.status(200).json(playlist.playlists[0].songs);
+
+    // Find the specific playlist from the playlists array using Mongoose's sub-document id method
+    const selectedPlaylist = playlistData.playlists.id(playlistId);
+
+    // If the playlist is not found in the user's data, send a 404 response
+    if (!selectedPlaylist) {
+      return res.status(404).json({ message: "Playlist not found in user data" });
+    }
+
+    // Return the songs array from the specific playlist
+    res.status(200).json(selectedPlaylist.songs);
   } catch (error) {
-    console.log("failed to fetch playlist song ", error)
+    console.log("Failed to fetch playlist songs", error);
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
 
 // delete a Song from playlist
 export const deleteSongFromPlaylist = async (req, res) => {
