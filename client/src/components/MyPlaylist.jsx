@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import { PlayerContext } from "../context/PlayerContext";
 import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
+import { toast } from "react-toastify";
 
 const MyPlaylist = () => {
   const navigate = useNavigate();
@@ -37,7 +38,8 @@ const MyPlaylist = () => {
         playlistTitle,
         songs: [],
       });
-      alert("Playlist created successfully!");
+      toast.success("Playlist Created")
+      //alert("Playlist created successfully!");
       fetchPlaylists(); // Refresh the playlist list after creation
       setShowCreatePlaylist(false)
     } catch (err) {

@@ -80,7 +80,7 @@ export const addSongToPlaylist = async (req, res) => {
   
       await playlist.save(); // Save the updated playlist
   
-      res.status(200).json({ message: "Song added to playlist", playlist });
+      res.status(200).json({ message: "Song added to playlist", playlistSongs: selectedPlaylist.songs });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
