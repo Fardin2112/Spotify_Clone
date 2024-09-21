@@ -8,7 +8,7 @@ import PlaylistDetails from "./pages/PlaylistDetails"
 
 
  // axios.defaults.baseURL = "http://localhost:4000";
- axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
+  axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
 const App = () => {
  return (
