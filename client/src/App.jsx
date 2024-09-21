@@ -11,8 +11,8 @@ import { Analytics } from "@vercel/analytics/react"
 
 
 
- axios.defaults.baseURL = "http://localhost:4000";
- // axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
+ // axios.defaults.baseURL = "http://localhost:4000";
+ axios.defaults.baseURL = "https://spotify-clone-black-chi.vercel.app";
 
 const App = () => {
  return (
