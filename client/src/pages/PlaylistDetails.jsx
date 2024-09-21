@@ -8,6 +8,7 @@ import { PlayerContext } from "../context/PlayerContext";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
+import SyncLoader from "react-spinners/SyncLoader";
 
 const PlaylistDetail = () => {
   const navigate = useNavigate();
@@ -135,7 +136,6 @@ const PlaylistDetail = () => {
       console.log("Response from server:", response.data.playlistSongs);
       //window.location.reload();
       setPlaylistSongs(response.data.playlistSongs);
-
     } catch (err) {
       console.error("Failed to add song:", err);
       toast.error("Failed to add song.");
@@ -151,7 +151,7 @@ const PlaylistDetail = () => {
       await axios.delete(`/api/playlist/delete/${playlistId}`);
       // Redirect or refresh
       navigate("/");
-      toast.success("playlist delete successfully")
+      toast.success("playlist delete successfully");
     } catch (err) {
       toast.error("Failed to delete playlist.");
     } finally {
@@ -223,13 +223,13 @@ const PlaylistDetail = () => {
                   </button>
                   {showDeleteButton && (
                     <div className="p-3 bg-[#292929] absolute right-0 w-56 z-50 flex justify-start rounded-md">
-                    <button
-                      className="text-white text-md font-semibold px-4 py-2 rounded mt-1 hover:bg-gray-500 hover:bg-opacity-40 w-full flex items-center justify-start gap-2"
-                      onClick={() => deletePlaylist(playlistId)}
-                    >
-                      <IoRemoveCircleOutline className="text-xl" />
-                      Delete Playlist
-                    </button>
+                      <button
+                        className="text-white text-md font-semibold px-4 py-2 rounded mt-1 hover:bg-gray-500 hover:bg-opacity-40 w-full flex items-center justify-start gap-2"
+                        onClick={() => deletePlaylist(playlistId)}
+                      >
+                        <IoRemoveCircleOutline className="text-xl" />
+                        Delete Playlist
+                      </button>
                     </div>
                   )}
                 </div>
@@ -252,14 +252,24 @@ const PlaylistDetail = () => {
           </div>
           <hr />
           <div className="">
-            {loading && <p>Loading...</p>}
+            {loading &&  <div className="flex w-full justify-center items-center py-5"><SyncLoader
+            data-testid="loader"
+            aria-label="Loading Spinner"
+            color="#dfdfdf"
+            margin={2}
+          />
+          </div>
+          }
             {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
-            <h1 className="text-xl lg:text-2xl ml-2 text-gray-200 mt-2 mb-2">
+            <h1 className="text-xl lg:text-2xl ml-2 text-gray-200 pt-4 pb-4">
               Songs in Playlist
             </h1>
             {playlistSongs.length > 0 ? (
               playlistSongs.map((item, index) => (
-                <div key={index} className="song-item flex w-full hover:bg-[#ffffff2b] items-center justify-start relative">
+                <div
+                  key={index}
+                  className="song-item flex w-full hover:bg-[#ffffff2b] items-center justify-start relative"
+                >
                   <div
                     onClick={() => handleClick(item)}
                     className="grid grid-cols-3 sm:grid-cols-3 gap-2 p-2 items-center text-[#a7a7a7]  mb-1 w-full"
@@ -275,27 +285,27 @@ const PlaylistDetail = () => {
                     <p className="text-center text-[15px]">{item.duration}</p>
                     {/* button to delete song */}
                   </div>
-                  <div className="">
+                  <div className="w-1/4 flex justify-center items-center">
                     <button
                       className="ml-8 cursor-pointer w-12 h-12 items-center flex justify-center mb-2 text-xl lg:text-2xl"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent click event from bubbling up
                         setClickedSongId(
                           item._id === clickedSongId ? null : item._id
-                        )
+                        );
                       }}
                     >
                       <BsThreeDotsVertical />
                     </button>
                     {clickedSongId === item._id && (
                       <div className="p-3 bg-[#292929] absolute right-0 w-56 z-50 flex justify-start rounded-md">
-                      <button
-                        className="text-white text-md font-semibold px-4 py-2 rounded mt-1 hover:bg-gray-500 hover:bg-opacity-40 w-full flex items-center justify-start gap-2"
-                        onClick={() => deleteSong(item._id)}
-                      >
-                        <IoRemoveCircleOutline className="text-xl" />
-                        Remove
-                      </button>
+                        <button
+                          className="text-white text-md font-semibold px-4 py-2 rounded mt-1 hover:bg-gray-500 hover:bg-opacity-40 w-full flex items-center justify-start gap-2"
+                          onClick={() => deleteSong(item._id)}
+                        >
+                          <IoRemoveCircleOutline className="text-xl" />
+                          Remove
+                        </button>
                       </div>
                     )}
                   </div>
@@ -306,28 +316,34 @@ const PlaylistDetail = () => {
                 Add Songs in your favourite playlist from Recommended Songs
               </p>
             )}
-            <h1 className="text-xl lg:text-2xl ml-2 text-gray-200">
+            <h1 className="text-xl lg:text-2xl ml-2 text-gray- pt-4 pb-4">
               Recommended Songs
             </h1>
             {allSong.map((item, index) => (
               <div
                 key={index}
-                className="grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer"
+                className="song-item flex w-full hover:bg-[#ffffff2b] items-center justify-start relative"
               >
-                <p className="text-white">
-                  <img
-                    className="inline w-10 mr-5 lg:w-16"
-                    src={item.image}
-                    alt=""
-                  />
-                </p>
-                <p className="text-[15px]">{item.name}</p>
-                <button
-                  className="text-white bg-green-500 px-2 py-1 rounded hover:bg-green-700 lg:w-32"
-                  onClick={() => addSong(JSON.stringify(item))} // Pass songId and songLink when clicking Add
-                >
-                  Add
-                </button>
+                <div onClick={() => handleClick(item)} className="w-full grid grid-cols-3 sm:grid-cols-3 gap-2 p-2 items-center text-[#a7a7a7] cursor-pointer">
+                  <span className="text-white">
+                    <img
+                      className="inline w-10 mr-5 lg:w-16"
+                      src={item.image}
+                      alt=""
+                    />
+                  </span>
+                  <p className="text-[15px]">{item.name}</p>
+                  <p className="text-center text-[15px]">{item.duration}</p>
+                  </div>
+                  <div className="w-1/4 flex justify-center items-center">
+                    <button
+                      className="text-white bg-green-500 px-2 py-1 rounded hover:bg-green-700 lg:w-32 w-full"
+                      onClick={() => addSong(JSON.stringify(item))} // Pass songId and songLink when clicking Add
+                    >
+                      Add
+                    </button>
+                  </div>
+                
               </div>
             ))}
           </div>

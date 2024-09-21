@@ -30,7 +30,7 @@ const HomePage = () => {
     getSong()
   },[setSongsData,setTrack,setButtonTrue])
   return (
-    <div className="h-screen bg-black">
+    <div className="h-screen bg-black overflow-hidden">
       {songsData.length !== 0 ? (
         <>
           <div className="h-[90%] flex  ">
