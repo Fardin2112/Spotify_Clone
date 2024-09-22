@@ -102,9 +102,9 @@ const RegisterPage = () => {
         <div className="mt-8 flex flex-col items-center">
          
           <p className="sm:block text-gray-500 font-semibold text-lg">
-            Don't Have an account?
+          Already have an account? 
           </p>
-          <Link to="/Login"  className="sm:block font-semibold text-lg pl-1">Sign up for Spotify</Link>
+          <Link to="/Login"  className="sm:block font-semibold text-lg pl-1">Log in here</Link>
         </div>
       </div>
       <footer className="w-[90%] sm:w-[400px] text-gray-500 px-4 sm:px-8 mt-3 text-xs sm:mb-5">This site is protected by reCAPTCHA and the Google
