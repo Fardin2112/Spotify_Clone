@@ -24,8 +24,14 @@ const MyPlaylist = () => {
 
   // Function to create a new playlist
   const createPlaylist = async () => {
+    if(!user){
+      navigate('/Register')
+      toast.error("Please signup to create playlist")
+      return;
+    }
     if (!playlistTitle) {
-      setError("Please enter a playlist title.");
+      toast.error("Please enter a playlist ttile")
+      //setError("Please enter a playlist title.");
       return;
     }
 
@@ -44,7 +50,7 @@ const MyPlaylist = () => {
       setShowCreatePlaylist(false)
     } catch (err) {
       console.error("Error creating playlist:", err);
-      setError("Failed to create playlist. Please try again.");
+      toast.error("Failed to create playlist. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -59,7 +65,7 @@ const MyPlaylist = () => {
       }
     } catch (err) {
       console.error("Error fetching playlists:", err);
-      setError("Failed to fetch playlists. Please try again.");
+      toast.error("Failed to fetch playlists. Please try again.");
     }
   };
 
@@ -98,7 +104,7 @@ const MyPlaylist = () => {
               {loading ? "Creating Playlist..." : <h2 className="font-semibold text-lg">Create</h2>}
             </button>
           </div>
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
         </div>
       )}
 
