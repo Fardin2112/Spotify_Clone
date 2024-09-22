@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import { useFirebase } from "../context/FirebaseContext";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 const RegisterPage = () => {
@@ -15,13 +16,22 @@ const RegisterPage = () => {
   // handle for signin using email and password
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
+      return;
+    }
+  
     try {
       await firebase.signupUserWithEmailandPassword(email, password);
       navigate(`/`);
+      toast.info("Verification link sent to your email. Please verify to login.");
     } catch (err) {
+      toast.error(err.message);
       console.log(err);
     }
   };
+  
    
   return (
     <div className="w-full h-screen bg-black flex flex-col items-center">

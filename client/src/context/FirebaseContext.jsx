@@ -12,6 +12,7 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const GoogleProvider = new GoogleAuthProvider();
 
@@ -72,6 +73,7 @@ export const FirebaseProvider = (props) => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        toast.error(errorMessage)
         console.log(errorCode, errorMessage);
       });
   };
@@ -87,7 +89,7 @@ export const FirebaseProvider = (props) => {
       const user = userCredential.user;
 
       if (user.emailVerified) {
-        console.log("Email is verified, proceed to app");
+        toast.success("Email is verified, proceed to app");
         navigate("/"); // Redirect to your main page
       } else {
         alert("Please verify your email address before logging in.");
@@ -95,6 +97,7 @@ export const FirebaseProvider = (props) => {
         await firebaseAuth.signOut(); // Sign out if email is not verified
       }
     } catch (error) {
+      toast.error(error.message)
       console.error("Error signing in:", error);
     }
   };
@@ -129,6 +132,7 @@ export const FirebaseProvider = (props) => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        toast.error(errorMessage)
         console.log(errorCode,errorMessage)
         // ..
       });
@@ -138,8 +142,10 @@ export const FirebaseProvider = (props) => {
     try {
       await signOut(firebaseAuth);
       navigate("/login"); // Redirect to login page after logout
+      toast.info("Log Out successfully")
     } catch (error) {
-      console.log("Error Logging Out", error);
+      toast.error("Error Logging Out", error);
+      console.log(error)
     }
   };
 
