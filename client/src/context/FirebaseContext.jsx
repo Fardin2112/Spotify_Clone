@@ -20,13 +20,13 @@ const FirebaseContext = createContext();
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  databaseURL: import.meta.env.VITE_DATABASE_URL,
-  projectId: import.meta.env.VITE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
+  apiKey: "AIzaSyAZQyjEeGtxZD-7DzODD7t3oFs6DkTne0I",
+  authDomain: "spotify-clone-fcb24.firebaseapp.com",
+  databaseURL: "https://spotify-clone-fcb24-default-rtdb.firebaseio.com",
+  projectId: "spotify-clone-fcb24",
+  storageBucket: "spotify-clone-fcb24.appspot.com",
+  messagingSenderId: "38889198484",
+  appId: "1:38889198484:web:5a2249c917c0f78978f581",
 };
 
 
