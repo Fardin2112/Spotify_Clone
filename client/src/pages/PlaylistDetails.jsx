@@ -208,10 +208,12 @@ const PlaylistDetail = () => {
     <div className="w-full h-screen flex flex-col bg-gradient-to-b from-blue-500 to-black text-white font-bold p-3">
       <div className="flex-[90%] overflow-auto">
         <Navbar />
-        <div className="h-full overflow-auto">
+        <div className="h-full overflow-auto px-1 md:px-36">
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-center mb-6">
+            <div className="flex justify-center md:justify-start">
             <img className="w-48 rounded" src={assets.playlistCover} alt="" />
-            <div>
+            </div>
+            <div className="">
               <div className="flex justify-between items-center relative">
                 <p>Playlist</p>
                 <div className="items-end" ref={deleteButtonRef}>
